@@ -81,6 +81,31 @@ export function ClosingSection() {
                 <span className="text-ink-soft">، {credit.relation}</span>
               )}
             </p>
+
+            {/* Social links: plain text separated by small gold dots */}
+            {credit.links.length > 0 && (
+              <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+                {credit.links.map((link, index) => (
+                  <li key={link.id} className="flex items-center gap-3">
+                    {index > 0 && (
+                      <span
+                        aria-hidden="true"
+                        className="size-1 rounded-full bg-gold/60"
+                      />
+                    )}
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${link.label}: ${credit.name}`}
+                      className="px-1 py-1.5 font-text text-base text-burgundy underline-offset-4 transition-colors hover:text-rose hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </Reveal>
         )}
       </div>

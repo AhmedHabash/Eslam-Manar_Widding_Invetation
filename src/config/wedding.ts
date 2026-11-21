@@ -77,19 +77,37 @@ export const weddingConfig: WeddingConfig = {
       icon: "dance",
     },
   ],
+
   share: {
     message:
       "يسعدنا دعوتكم لحضور حفل زفاف إسلام ومنار 💍\nالخميس ١٠ ديسمبر ٢٠٢٦ - قاعة لانا",
   },
 
   music: {
-    // Keep this false until we add the audio file to /public/audio.
     enabled: true,
     src: "/audio/wedding-music.mp3",
   },
+
   credit: {
     label: "صُمّمت هذه الدعوة بحبّ بواسطة",
     name: "م. أحمد عصام",
     relation: "شقيق العروس",
+    links: [
+      {
+        id: "facebook",
+        label: "فيسبوك",
+        url: "https://www.facebook.com/share/1H49jNy5bS/",
+      },
+      {
+        id: "whatsapp",
+        label: "واتساب",
+        url: "https://wa.me/201557209799",
+      },
+      {
+        id: "github",
+        label: "جيت هاب",
+        url: "https://github.com/AhmedHabash",
+      },
+    ],
   },
 };

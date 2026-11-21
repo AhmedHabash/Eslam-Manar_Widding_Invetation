@@ -3,8 +3,7 @@ type ShareOptions = {
   url: string; // the website link to include in the message
 };
 
-const WHATSAPP_BASE_URL = "https://wa.me/01557209799"; // the official WhatsApp share link
-
+const WHATSAPP_BASE_URL = "https://wa.me/";
 // Builds a WhatsApp link that opens with the message already written.
 // Without a phone number, WhatsApp lets the guest choose who to send it to.
 export function buildWhatsAppShareUrl({ message, url }: ShareOptions): string {

@@ -57,11 +57,20 @@ export type MusicConfig = {
   enabled: boolean; // lets us turn the music feature on/off easily
   src: string; // path inside /public, e.g. "/audio/wedding-music.mp3"
 };
+
+// One social media link shown next to the design credit.
+export type SocialLink = {
+  id: string; // unique key, e.g. "facebook"
+  label: string; // text shown to the guest, e.g. "فيسبوك"
+  url: string; // full link, e.g. "https://github.com/username"
+};
+
 // Credit line shown quietly at the very end of the invitation.
 export type Credit = {
   label: string; // text before the name, e.g. "صُمّمت هذه الدعوة بحبّ بواسطة"
   name: string; // the designer's name
   relation: string; // how he is related to the couple
+  links: SocialLink[]; // the designer's social media links
 };
 
 // The full configuration object. This is the single source of truth
