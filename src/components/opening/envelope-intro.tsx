@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { MailOpen } from "lucide-react";
+import { MailOpen, Pointer } from "lucide-react";
 import { weddingConfig } from "@/config/wedding";
 import { Button } from "@/components/ui/button";
 import { FloralCorner } from "@/components/ui/floral-corner";
@@ -33,7 +33,11 @@ export function EnvelopeIntro({ onOpen, onOpened }: EnvelopeIntroProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const { groom, bride, date, credit } = weddingConfig;
+  const isClosed = phase === "closed";
   const isOpening = phase === "opening";
+
+  // The envelope gently floats while it waits to be opened.
+  const canFloat = isClosed && !prefersReducedMotion;
 
   // Lock page scrolling while the intro is on screen.
   useEffect(() => {
@@ -105,114 +109,169 @@ export function EnvelopeIntro({ onOpen, onOpened }: EnvelopeIntroProps) {
           {/* Content: centered when the screen is tall enough, and the
               whole column simply scrolls when it is not */}
           <div className="relative mx-auto flex min-h-full w-full flex-col items-center justify-center px-6 py-10">
-            {/* Line above the envelope */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isOpening ? 0 : 1 }}
-              transition={{ duration: 0.8, delay: isOpening ? 0 : 0.3 }}
-              className="mb-10 font-text text-xl text-rose-soft"
-            >
-              دعوة زفاف
-            </motion.p>
-
-            {/* The envelope (clicking it also opens the invitation) */}
+            {/* Headline: tells the guest right away that this is an invitation to open */}
             <motion.div
-              aria-hidden="true"
-              onClick={handleOpen}
-              initial={{ opacity: 0, y: 30, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: isOpening ? 1.05 : 1 }}
-              transition={{
-                duration: 1,
-                ease: EASE,
-                scale: { duration: 2.4, ease: "easeInOut" },
-              }}
-              style={{ perspective: 1200 }}
-              className="relative aspect-[4/3] w-[min(86vw,22rem)] cursor-pointer"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: isOpening ? 0 : 1, y: 0 }}
+              transition={{ duration: 0.8, delay: isOpening ? 0 : 0.2 }}
+              className="mb-9 text-center"
             >
-              {/* 1. Back of the envelope */}
-              <div className="absolute inset-0 rounded-md bg-cream shadow-2xl shadow-black/40" />
+              <p className="font-script text-3xl leading-snug text-ivory sm:text-4xl">
+                وصلتك دعوة خاصة
+              </p>
+              <p className="mt-2 font-text text-lg text-rose-soft">
+                افتح المظروف لتكتشف الدعوة كاملة
+              </p>
+            </motion.div>
 
-              {/* 2. Flap: swings open, then moves behind the letter */}
+            {/* Floating wrapper: moves the whole envelope up and down while it waits */}
+            <motion.div
+              animate={{ y: canFloat ? [0, -9, 0] : 0 }}
+              transition={
+                canFloat
+                  ? { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+                  : { duration: 0.4 }
+              }
+            >
+              {/* The envelope (clicking it also opens the invitation) */}
               <motion.div
-                initial={false}
-                animate={{
-                  rotateX: isOpening ? 180 : 0,
-                  zIndex: isOpening ? 5 : 30,
-                }}
+                aria-hidden="true"
+                onClick={handleOpen}
+                initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: isOpening ? 1.05 : 1 }}
                 transition={{
-                  rotateX: { duration: 0.8, ease: "easeInOut" },
-                  zIndex: { delay: 0.4, duration: 0 },
+                  duration: 1,
+                  ease: EASE,
+                  scale: { duration: 2.4, ease: "easeInOut" },
                 }}
-                style={{
-                  transformOrigin: "top",
-                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                }}
-                className="absolute inset-x-0 top-0 h-[58%] bg-rose-soft"
-              />
-
-              {/* 3. The letter: rises out of the envelope */}
-              <motion.div
-                initial={false}
-                animate={{ y: isOpening ? "-55%" : "0%" }}
-                transition={{ duration: 1, delay: 0.6, ease: EASE }}
-                className="absolute inset-x-[5%] top-[6%] z-20 h-[88%]"
+                style={{ perspective: 1200 }}
+                className="relative aspect-[4/3] w-[min(86vw,22rem)] cursor-pointer"
               >
-                <div className="flex h-full flex-col items-center justify-center rounded-sm bg-ivory px-3 text-center shadow-md ring-1 ring-gold/30">
-                  <p className="font-text text-sm text-sage-deep">
-                    بكل الحب ندعوكم
-                  </p>
-                  <p className="mt-2 font-script text-3xl leading-snug text-burgundy">
-                    {groom.nameAr}{" "}
-                    <span className="font-roman text-2xl text-gold">&amp;</span>{" "}
-                    {bride.nameAr}
-                  </p>
-                  <p className="mt-2 font-text text-base text-ink-soft">
-                    {date.dayLabel} {date.monthAr} {date.year}
-                  </p>
-                </div>
-              </motion.div>
+                {/* 1. Back of the envelope */}
+                <div className="absolute inset-0 rounded-md bg-cream shadow-2xl shadow-black/40" />
 
-              {/* 4. Front pocket of the envelope (covers the bottom of the letter) */}
-              <div
-                style={{
-                  clipPath: "polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%)",
-                }}
-                className="absolute inset-0 z-[25] rounded-md bg-ivory"
-              />
-
-              {/* 5. Seal with the monogram: disappears when the flap opens */}
-              <div className="absolute left-1/2 top-[58%] z-[35] aspect-square w-[24%] -translate-x-1/2 -translate-y-1/2">
+                {/* 2. Flap: swings open, then moves behind the letter */}
                 <motion.div
                   initial={false}
                   animate={{
-                    opacity: isOpening ? 0 : 1,
-                    scale: isOpening ? 0.6 : 1,
+                    rotateX: isOpening ? 180 : 0,
+                    zIndex: isOpening ? 5 : 30,
                   }}
-                  transition={{ duration: 0.35 }}
-                  className="flex size-full items-center justify-center rounded-full bg-burgundy p-1.5 shadow-lg ring-1 ring-gold/60"
+                  transition={{
+                    rotateX: { duration: 0.8, ease: "easeInOut" },
+                    zIndex: { delay: 0.4, duration: 0 },
+                  }}
+                  style={{
+                    transformOrigin: "top",
+                    clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                  }}
+                  className="absolute inset-x-0 top-0 h-[58%] bg-rose-soft"
+                />
+
+                {/* 3. The letter: rises out of the envelope */}
+                <motion.div
+                  initial={false}
+                  animate={{ y: isOpening ? "-55%" : "0%" }}
+                  transition={{ duration: 1, delay: 0.6, ease: EASE }}
+                  className="absolute inset-x-[5%] top-[6%] z-20 h-[88%]"
                 >
-                  <Monogram animated={false} tone="dark" className="w-full" />
+                  <div className="flex h-full flex-col items-center justify-center rounded-sm bg-ivory px-3 text-center shadow-md ring-1 ring-gold/30">
+                    <p className="font-text text-sm text-sage-deep">
+                      بكل الحب ندعوكم
+                    </p>
+                    <p className="mt-2 font-script text-3xl leading-snug text-burgundy">
+                      {groom.nameAr}{" "}
+                      <span className="font-roman text-2xl text-gold">
+                        &amp;
+                      </span>{" "}
+                      {bride.nameAr}
+                    </p>
+                    <p className="mt-2 font-text text-base text-ink-soft">
+                      {date.dayLabel} {date.monthAr} {date.year}
+                    </p>
+                  </div>
                 </motion.div>
-              </div>
+
+                {/* 4. Front pocket of the envelope (covers the bottom of the letter) */}
+                <div
+                  style={{
+                    clipPath:
+                      "polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%)",
+                  }}
+                  className="absolute inset-0 z-[25] rounded-md bg-ivory"
+                />
+
+                {/* 5. Seal with the monogram. While the envelope is closed:
+                    pulse rings spread from it, and a hand taps below it.
+                    Everything disappears when the flap opens. */}
+                <div className="absolute left-1/2 top-[58%] z-[35] aspect-square w-[24%] -translate-x-1/2 -translate-y-1/2">
+                  {isClosed && (
+                    <>
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 rounded-full bg-gold/40 motion-safe:animate-ping"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 rounded-full bg-rose/30 motion-safe:animate-ping [animation-delay:0.9s]"
+                      />
+                    </>
+                  )}
+
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      opacity: isOpening ? 0 : 1,
+                      scale: isOpening ? 0.6 : 1,
+                    }}
+                    transition={{ duration: 0.35 }}
+                    className="relative flex size-full items-center justify-center rounded-full bg-burgundy p-1.5 shadow-lg ring-1 ring-gold/60"
+                  >
+                    <Monogram animated={false} tone="dark" className="w-full" />
+                  </motion.div>
+
+                  {isClosed && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-1/2 top-[88%] -translate-x-1/2"
+                    >
+                      <Pointer
+                        size={30}
+                        strokeWidth={1.5}
+                        className="fill-ivory text-burgundy-deep drop-shadow-md motion-safe:animate-bounce"
+                      />
+                    </span>
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
 
-            {/* The accessible, real button */}
+            {/* The accessible, real button, with a soft pulse around it */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isOpening ? 0 : 1 }}
               transition={{ duration: 0.6, delay: isOpening ? 0 : 1 }}
               className="mt-10 flex flex-col items-center gap-3"
             >
-              <Button
-                variant="light"
-                onClick={handleOpen}
-                disabled={phase !== "closed"}
-                icon={<MailOpen size={20} strokeWidth={1.6} />}
-              >
-                افتح الدعوة
-              </Button>
+              <div className="relative">
+                {isClosed && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full bg-ivory/25 motion-safe:animate-ping [animation-duration:2.4s]"
+                  />
+                )}
+                <Button
+                  variant="light"
+                  onClick={handleOpen}
+                  disabled={!isClosed}
+                  className="relative px-10 py-4 text-xl"
+                  icon={<MailOpen size={22} strokeWidth={1.6} />}
+                >
+                  افتح الدعوة
+                </Button>
+              </div>
               <p className="font-text text-base text-rose-soft/80">
-                أو اضغط على المظروف
+                أو اضغط على المظروف نفسه
               </p>
             </motion.div>
 

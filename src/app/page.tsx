@@ -5,6 +5,7 @@ import { weddingConfig } from "@/config/wedding";
 import { useAudio } from "@/hooks/use-audio";
 import { EnvelopeIntro } from "@/components/opening/envelope-intro";
 import { MusicToggle } from "@/components/features/music-toggle";
+import { ScrollHint } from "@/components/features/scroll-hint";
 import { HeroSection } from "@/components/sections/hero-section";
 import { CountdownSection } from "@/components/sections/countdown-section";
 import { InvitationSection } from "@/components/sections/invitation-section";
@@ -14,7 +15,8 @@ import { ClosingSection } from "@/components/sections/closing-section";
 
 export default function HomePage() {
   // Becomes true when the envelope starts to fade away.
-  // The hero uses it to begin its entrance animation at the right moment.
+  // The hero uses it to begin its entrance animation at the right moment,
+  // and the scroll hint uses it to know when to appear.
   const [isOpened, setIsOpened] = useState(false);
 
   // One audio controller for the whole page, shared by the envelope and the button.
@@ -42,6 +44,8 @@ export default function HomePage() {
         <VenueSection />
         <ClosingSection />
       </main>
+
+      <ScrollHint visible={isOpened} />
 
       <MusicToggle
         isPlaying={isPlaying}
