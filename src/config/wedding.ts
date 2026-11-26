@@ -9,7 +9,7 @@ export const weddingConfig: WeddingConfig = {
   },
 
   bride: {
-    nameAr: "منار",
+    nameAr: " م ",
     nameEn: "Manar",
     initialAr: "م",
     initialEn: "M",
@@ -18,12 +18,12 @@ export const weddingConfig: WeddingConfig = {
   date: {
     // Egypt is UTC+2 in December. The time (19:00) is a placeholder:
     // replace it with the real start time of the wedding.
-    dateTimeISO: "2026-12-10T19:00:00+02:00",
-    weekdayAr: "الخميس",
-    dayLabel: "١٠",
+    dateTimeISO: "2026-12-17T19:00:00+02:00",
+    weekdayAr: "الثلاثاء",
+    dayLabel: "17",
     monthAr: "ديسمبر",
     year: "٢٠٢٦",
-    numeric: "10 / 12 / 2026",
+    numeric: "17 / 12 / 2026",
   },
 
   venue: {
@@ -80,7 +80,7 @@ export const weddingConfig: WeddingConfig = {
 
   share: {
     message:
-      "يسعدنا دعوتكم لحضور حفل زفاف إسلام ومنار 💍\nالخميس ١٠ ديسمبر ٢٠٢٦ - قاعة لانا",
+      "يسعدنا دعوتكم لحضور حفل زفاف إسلام و م\ر 💍\الثلاثاء 17 ديسمبر ٢٠٢٦ - قاعة لانا",
   },
 
   music: {
