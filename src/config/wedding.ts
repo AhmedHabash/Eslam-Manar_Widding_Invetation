@@ -15,17 +15,16 @@ export const weddingConfig: WeddingConfig = {
     initialEn: "M",
   },
 
-  date: {
+   date: {
     // Egypt is UTC+2 in December. The time (19:00) is a placeholder:
     // replace it with the real start time of the wedding.
-    dateTimeISO: "2026-12-17T19:00:00+02:00",
+    dateTimeISO: "2026-12-15T19:00:00+02:00",
     weekdayAr: "الثلاثاء",
-    dayLabel: "17",
+    dayLabel: "١٥",
     monthAr: "ديسمبر",
     year: "٢٠٢٦",
-    numeric: "17 / 12 / 2026",
+    numeric: "15 / 12 / 2026",
   },
-
   venue: {
     nameAr: "قاعة لانا",
     mapsUrl: "https://goo.gl/maps/uGRALUq5mkXDfTxz7",
